@@ -24,8 +24,7 @@ public class BaseDatos {
     public BaseDatos(String url) {
         this.url = "jdbc:sqlite:" + url;
     }
-    
-    
+
     public void connect() {
         try {
             conn = DriverManager.getConnection(url);
@@ -45,12 +44,12 @@ public class BaseDatos {
         }
     }
 
-    public void insertarProducto(Producto p) {
+    public void insertarProducto(String id, String nombre, int precio) {
         try {
             PreparedStatement st = conn.prepareStatement("insert into productos (id,nombre, precio) values (?,?,?)");
-            st.setString(1, p.getId());
-            st.setString(2, p.getNombre());
-            st.setInt(3, p.getPrecio());
+            st.setString(1, id);
+            st.setString(2, nombre);
+            st.setInt(3, precio);
             st.execute();
             System.out.println("Insertado correctamente");
         } catch (SQLException ex) {
@@ -67,7 +66,7 @@ public class BaseDatos {
         }
     }
 
-    public void seleccionarProducto(String id) throws SQLException {
+    public ResultSet seleccionarProducto(String id) throws SQLException {
         Statement st = conn.createStatement();
         String sql = "SELECT nombre,precio "
                 + "FROM productos WHERE id = ?";
@@ -76,30 +75,37 @@ public class BaseDatos {
         pstmt.setString(1, id);
 
         ResultSet rs = pstmt.executeQuery();
-
-        while (rs.next()) {
-            System.out.println(rs.getString("nombre") + "\t"
-                    + rs.getInt("precio"));
-        }
+        return rs;
     }
+
     public ResultSet getListaId() throws SQLException {
         Statement st = conn.createStatement();
         String sql = "SELECT id FROM productos";
 
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        
+
         return rs;
-    }    
-    public void update(String id, int precio, String nombreNuevo) throws SQLException {
+    }
+
+    public void update(String id, int precio, String nombre) throws SQLException {
         String sql = "UPDATE productos SET nombre = ? , "
                 + "precio = ? "
                 + "WHERE id = ?";
 
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, nombreNuevo);
+        pstmt.setString(1, nombre);
         pstmt.setInt(2, precio);
         pstmt.setString(3, id);
         pstmt.executeUpdate();
     }
+
+    public void borrar(String id) throws SQLException {
+        String sql = "DELETE FROM productos WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, id);
+        pstmt.executeUpdate();
+
+    }
+
 }
