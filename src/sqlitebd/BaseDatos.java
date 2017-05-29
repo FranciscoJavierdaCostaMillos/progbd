@@ -14,7 +14,7 @@ import java.sql.Statement;
 
 /**
  *
- * @author kevin
+ * @author javi
  */
 public class BaseDatos {
 

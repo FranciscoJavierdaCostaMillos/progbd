@@ -8,7 +8,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author kevin
+ * @author javi
  */
 public class Ventana extends javax.swing.JFrame {
 
